@@ -1,2 +1,2 @@
-# spring-petclinic-msa
-微服务版spring-petlinic，课程《Kubernetes微服务实践》
+# spring2go-petclinic-msa-k8s
+Spring2Go Petclinic Microservices ~ Kubernetes Version

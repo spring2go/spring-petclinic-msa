@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: api-bff
+          uri: ${WEB_APP_ENDPOINT:http://localhost:8081}
+          predicates:
+            - Path=/api/bff/**
+        - id: vets-service
+          uri: ${VETS_SERVICE_ENDPOINT:http://localhost:8082}
+          predicates:
+            - Path=/api/vet/**
+          filters:
+            - StripPrefix=2
+        - id: visits-service
+          uri: ${VISITS_SERVICE_ENDPOINT:http://localhost:8083}
+          predicates:
+            - Path=/api/visit/**
+          filters:
+            - StripPrefix=2
+        - id: customers-service
+          uri: ${CUSTOMERS_SERVICE_ENDPOINT:http://localhost:8084}
+          predicates:
+            - Path=/api/customer/**
+          filters:
+            - StripPrefix=2
+        - id: web-app
+          uri: ${WEB_APP_ENDPOINT:http://localhost:8081}
+          predicates:
+            - Path=/**

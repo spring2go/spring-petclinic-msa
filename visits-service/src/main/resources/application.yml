@@ -1,0 +1,33 @@
+# embedded database init, supports mysql too trough the 'mysql' spring profile
+database: hsqldb
+spring:
+  application:
+    name: visits-service
+  datasource:
+    schema: classpath*:db/${database}/schema.sql
+    data: classpath*:db/${database}/data.sql
+
+server:
+  port: 8083
+
+# JPA
+spring.jpa.hibernate.ddl-auto: none
+
+# Logging
+logging.level.org.springframework: INFO
+
+# Metrics
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    export:
+      prometheus:
+        enabled: true
