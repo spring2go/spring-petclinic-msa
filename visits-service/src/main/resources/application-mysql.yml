@@ -4,5 +4,5 @@ spring:
   datasource:
     url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/petclinic?useSSL=false}
     username: ${DATASOURCE_USERNAME:root}
-    password: ${DATASOURCE:petclinic}
+    password: ${DATASOURCE_PASSWORD:petclinic}
     initialization-mode: ${DATASOURCE_INIT_MODE:never}
