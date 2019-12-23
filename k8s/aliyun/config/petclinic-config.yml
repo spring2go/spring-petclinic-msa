@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: petclinic-config
+data:
+  SERVER_PORT: "8080"
+  SPRING_PROFILES_ACTIVE: mysql
+  DATASOURCE_URL: jdbc:mysql://rm-uf6r1i21f8927i0c0.mysql.rds.aliyuncs.com:3306/petclinic
+  DATASOURCE_USERNAME: root
+  DATASOURCE_PASSWORD: Petclinic1234
+  WEB_APP_ENDPOINT: http://web:8080
+  VETS_SERVICE_ENDPOINT: http://vets:8080
+  VISITS_SERVICE_ENDPOINT: http://visits:8080
+  CUSTOMERS_SERVICE_ENDPOINT: http://customers:8080
