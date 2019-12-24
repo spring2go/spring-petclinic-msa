@@ -5,7 +5,7 @@ metadata:
 data:
   SERVER_PORT: "8080"
   SPRING_PROFILES_ACTIVE: mysql
-  DATASOURCE_URL: jdbc:mysql://rm-uf6r1i21f8927i0c0.mysql.rds.aliyuncs.com:3306/petclinic
+  DATASOURCE_URL: jdbc:mysql://rm-uf6jpes84u6t7pof7.mysql.rds.aliyuncs.com:3306/petclinic
   DATASOURCE_USERNAME: root
   DATASOURCE_PASSWORD: Petclinic1234
   WEB_APP_ENDPOINT: http://web:8080
