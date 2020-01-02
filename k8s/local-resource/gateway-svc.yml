@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+spec:
+  selector:
+    matchLabels:
+      app: gateway
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - name: gateway-service
+          image: spring2go/spring-petclinic-cloud-gateway:1.0.0.RELEASE
+          resources:
+            requests:
+              memory: "128Mi"
+            limits:
+              memory: "512Mi"
+          env:
+            - name: JAVA_OPTS
+              value: "-XX:MinRAMPercentage=50.0 -XX:MaxRAMPercentage=80.0 -XX:+HeapDumpOnOutOfMemoryError"
+            - name: SERVER_PORT
+              value: "8080"
+            - name: WEB_APP_ENDPOINT
+              value: http://web:8080
+            - name: VETS_SERVICE_ENDPOINT
+              value: http://vets:8080
+            - name: VISITS_SERVICE_ENDPOINT
+              value: http://visits:8080
+            - name: CUSTOMERS_SERVICE_ENDPOINT
+              value: http://customers:8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+spec:
+  selector:
+    app: gateway
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      nodePort: 31080
+  type: NodePort
