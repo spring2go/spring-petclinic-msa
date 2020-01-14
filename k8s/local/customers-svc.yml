@@ -15,7 +15,14 @@ spec:
       containers:
         - name: customers
           image: spring2go/spring-petclinic-customers-service:1.0.0.RELEASE
+          resources:
+            requests:
+              memory: "128Mi"
+            limits:
+              memory: "512Mi"
           env:
+            - name: JAVA_OPTS
+              value: "-XX:MaxRAMPercentage=80.0"
             - name: SERVER_PORT
               value: "8080"
 ---
