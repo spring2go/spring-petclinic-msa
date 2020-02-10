@@ -31,3 +31,5 @@ spring:
           uri: ${WEB_APP_ENDPOINT:http://localhost:8081}
           predicates:
             - Path=/**
+
+              
