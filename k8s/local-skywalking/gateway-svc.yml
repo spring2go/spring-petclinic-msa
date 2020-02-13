@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+spec:
+  selector:
+    matchLabels:
+      app: gateway
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      initContainers:
+        - image: spring2go/skywalking-agent-sidecar:6.6.0
+          name: sw-agent-sidecar
+          imagePullPolicy: IfNotPresent
+          command: ['sh']
+          args: ['-c','mkdir -p /skywalking/agent && cp -r /usr/skywalking/agent/* /skywalking/agent']
+          volumeMounts:
+            - mountPath: /skywalking/agent
+              name: sw-agent
+      containers:
+        - name: gateway-service
+          image: spring2go/spring-petclinic-cloud-gateway:1.0.0.RELEASE
+          env:
+            - name: JAVA_OPTS
+              value: -javaagent:/usr/skywalking/agent/skywalking-agent.jar
+            - name: SW_AGENT_NAME
+              value: petclinic-gateway
+            - name: SW_AGENT_COLLECTOR_BACKEND_SERVICES
+              value: oap.skywalking:11800
+            - name: SERVER_PORT
+              value: "8080"
+            - name: WEB_APP_ENDPOINT
+              value: http://web:8080
+            - name: VETS_SERVICE_ENDPOINT
+              value: http://vets:8080
+            - name: VISITS_SERVICE_ENDPOINT
+              value: http://visits:8080
+            - name: CUSTOMERS_SERVICE_ENDPOINT
+              value: http://customers:8080
+          volumeMounts:
+            - mountPath: /usr/skywalking/agent
+              name: sw-agent
+      volumes:
+        - name: sw-agent
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  labels:
+    svc: gateway
+spec:
+  selector:
+    app: gateway
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      nodePort: 31080
+  type: NodePort

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vets
+spec:
+  selector:
+    matchLabels:
+      app: vets
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vets
+    spec:
+      initContainers:
+        - image: spring2go/skywalking-agent-sidecar:6.6.0
+          name: sw-agent-sidecar
+          imagePullPolicy: IfNotPresent
+          command: ['sh']
+          args: ['-c','mkdir -p /skywalking/agent && cp -r /usr/skywalking/agent/* /skywalking/agent']
+          volumeMounts:
+            - mountPath: /skywalking/agent
+              name: sw-agent
+      containers:
+        - name: vets
+          image: spring2go/spring-petclinic-vets-service:1.0.0.RELEASE
+          env:
+            - name: JAVA_OPTS
+              value: -javaagent:/usr/skywalking/agent/skywalking-agent.jar
+            - name: SW_AGENT_NAME
+              value: petclinic-vets
+            - name: SW_AGENT_COLLECTOR_BACKEND_SERVICES
+              value: oap.skywalking:11800
+            - name: SERVER_PORT
+              value: "8080"
+          volumeMounts:
+            - mountPath: /usr/skywalking/agent
+              name: sw-agent
+      volumes:
+        - name: sw-agent
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vets
+  labels:
+    svc: vets
+spec:
+  selector:
+    app: vets
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
