@@ -16,8 +16,12 @@ spec:
         - image: spring2go/skywalking-agent-sidecar:6.6.0
           name: sw-agent-sidecar
           imagePullPolicy: IfNotPresent
-          command: ['sh']
-          args: ['-c','mkdir -p /skywalking/agent && cp -r /usr/skywalking/agent/* /skywalking/agent']
+          command: ["sh"]
+          args:
+            [
+              "-c",
+              "mkdir -p /skywalking/agent && cp -r /usr/skywalking/agent/* /skywalking/agent",
+            ]
           volumeMounts:
             - mountPath: /skywalking/agent
               name: sw-agent
@@ -34,7 +38,7 @@ spec:
             - name: SW_AGENT_NAME
               value: petclinic-visits
             - name: SW_AGENT_COLLECTOR_BACKEND_SERVICES
-              value: oap.skywalking:11800
+              value: oap.skywalking:11800 # FQDN: servicename.namespacename.svc.cluster.local
             - name: SERVER_PORT
               value: "8080"
           volumeMounts:
