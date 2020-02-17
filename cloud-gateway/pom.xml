@@ -8,7 +8,7 @@
 	<packaging>jar</packaging>
 	<description>Spring2Go PetClinic Cloud Gateway</description>
 
-    <!--for testing circleci 3-->
+    <!--for testing circleci 4-->
 
 	<parent>
 		<groupId>com.spring2go.samples</groupId>

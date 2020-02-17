@@ -25,9 +25,6 @@ jobs:
       # git pull
       - checkout
 
-      # setup teting env
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Login to Dockerhub
           command: docker login -u $DOCKER_USER -p $DOCKER_PASS
@@ -62,9 +59,6 @@ jobs:
       # git pull
       - checkout
 
-      # setup teting env
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Login to Dockerhub
           command: docker login -u $DOCKER_USER -p $DOCKER_PASS
@@ -99,9 +93,6 @@ jobs:
       # git pull
       - checkout
 
-      # setup teting env
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Login to Dockerhub
           command: docker login -u $DOCKER_USER -p $DOCKER_PASS
@@ -136,9 +127,6 @@ jobs:
       # git pull
       - checkout
 
-      # setup teting env
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Login to Dockerhub
           command: docker login -u $DOCKER_USER -p $DOCKER_PASS
@@ -173,9 +161,6 @@ jobs:
       # git pull
       - checkout
 
-      # setup teting env
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Login to Dockerhub
           command: docker login -u $DOCKER_USER -p $DOCKER_PASS
