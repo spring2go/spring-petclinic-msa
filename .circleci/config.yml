@@ -23,7 +23,8 @@ jobs:
     working_directory: ~/spring-petclinic-msa/cloud-gateway
     steps:
       # git pull
-      - checkout
+      - checkout:
+          path: ~/spring-petclinic-msa
 
       - run:
           name: Login to Dockerhub
@@ -57,7 +58,8 @@ jobs:
     working_directory: ~/spring-petclinic-msa/customers-service
     steps:
       # git pull
-      - checkout
+      - checkout:
+          path: ~/spring-petclinic-msa
 
       - run:
           name: Login to Dockerhub
@@ -91,7 +93,8 @@ jobs:
     working_directory: ~/spring-petclinic-msa/vets-service
     steps:
       # git pull
-      - checkout
+      - checkout:
+          path: ~/spring-petclinic-msa
 
       - run:
           name: Login to Dockerhub
@@ -125,7 +128,8 @@ jobs:
     working_directory: ~/spring-petclinic-msa/visits-service
     steps:
       # git pull
-      - checkout
+      - checkout:
+          path: ~/spring-petclinic-msa
 
       - run:
           name: Login to Dockerhub
@@ -159,7 +163,8 @@ jobs:
     working_directory: ~/spring-petclinic-msa/web-app
     steps:
       # git pull
-      - checkout
+      - checkout:
+          path: ~/spring-petclinic-msa
 
       - run:
           name: Login to Dockerhub
