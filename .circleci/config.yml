@@ -27,11 +27,10 @@ jobs:
 
       # setup teting env
       - setup_remote_docker:
-        docker_layer_caching: true
+          docker_layer_caching: true
       - run:
-        name: Login to Dockerhub
-        command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run:
+          name: Login to Dockerhub
+          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
 
       # Download and cache dependencies
       - restore_cache:
@@ -65,11 +64,10 @@ jobs:
 
       # setup teting env
       - setup_remote_docker:
-        docker_layer_caching: true
+          docker_layer_caching: true
       - run:
-        name: Login to Dockerhub
-        command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run:
+          name: Login to Dockerhub
+          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
 
       # Download and cache dependencies
       - restore_cache:
@@ -103,11 +101,10 @@ jobs:
 
       # setup teting env
       - setup_remote_docker:
-        docker_layer_caching: true
+          docker_layer_caching: true
       - run:
-        name: Login to Dockerhub
-        command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run:
+          name: Login to Dockerhub
+          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
 
       # Download and cache dependencies
       - restore_cache:
@@ -141,11 +138,10 @@ jobs:
 
       # setup teting env
       - setup_remote_docker:
-        docker_layer_caching: true
+          docker_layer_caching: true
       - run:
-        name: Login to Dockerhub
-        command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run:
+          name: Login to Dockerhub
+          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
 
       # Download and cache dependencies
       - restore_cache:
@@ -179,11 +175,10 @@ jobs:
 
       # setup teting env
       - setup_remote_docker:
-        docker_layer_caching: true
+          docker_layer_caching: true
       - run:
-        name: Login to Dockerhub
-        command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run:
+          name: Login to Dockerhub
+          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
 
       # Download and cache dependencies
       - restore_cache:
