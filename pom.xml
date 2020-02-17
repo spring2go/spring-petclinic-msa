@@ -30,6 +30,8 @@
         <docker.image.prefix>spring2go</docker.image.prefix>
         <docker.image.exposed.port>8080</docker.image.exposed.port>
         <dockerfile.plugin.version>1.4.13</dockerfile.plugin.version>
+        <docker.image.tag>${project.version}</docker.image.tag>
+        <dockerfile.maven.settings.auth>true</dockerfile.maven.settings.auth>
     </properties>
 
     <build>
@@ -86,9 +88,9 @@
                     <configuration>
                         <repository>${docker.image.prefix}/${project.artifactId}</repository>
                         <contextDirectory>${basedir}</contextDirectory>
-                        <tag>${project.version}</tag>
+                        <tag>${docker.image.tag}</tag>
                         <!-- 注意在本地.m2/settings.xml中设置dockerhub账号和密码 -->
-                        <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                        <useMavenSettingsForAuth>${dockerfile.maven.settings.auth}</useMavenSettingsForAuth>
                         <buildArgs>
                             <ARTIFACT_NAME>target/${project.build.finalName}</ARTIFACT_NAME>
                             <EXPOSED_PORT>${docker.image.exposed.port}</EXPOSED_PORT>

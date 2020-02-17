@@ -1,0 +1,209 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8u242-jdk
+    steps:
+      - checkout
+      - run:
+          name: Determine which directories have changed
+          command: |
+            git diff --no-commit-id --name-only -r `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f1 | sort -u >  projects
+            printf "Modified directories:\n"
+            cat projects
+            while read project; do
+              if grep -Fxq $project project-dirs; then
+                printf "\nTriggerring build for project: "$project
+                curl -s -u ${CIRCLE_TOKEN}: -d build_parameters[CIRCLE_JOB]=${project} https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH
+              fi
+            done < projects
+  cloud-gateway:
+    docker:
+      - image: circleci/openjdk:8u242-jdk
+    working_directory: ~/spring-petclinic-msa/cloud-gateway
+    steps:
+      # git pull
+      - checkout
+
+      # setup teting env
+      - setup_remote_docker:
+        docker_layer_caching: true
+      - run:
+        name: Login to Dockerhub
+        command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run:
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - cloud-gateway-{{ checksum "pom.xml"}}
+
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: cloud-gateway-{{ checksum "pom.xml"}}
+
+      # package into a jar and build image
+      - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
+
+      # push docker image to docker hub
+      - run: mvn dockerfile:push
+
+      # store raw content of src code
+      - store_artifacts:
+          path: target/classes
+          destination: spring-petclinic-cloud-gateway
+  customers-service:
+    docker:
+      - image: circleci/openjdk:8u242-jdk
+    working_directory: ~/spring-petclinic-msa/customers-service
+    steps:
+      # git pull
+      - checkout
+
+      # setup teting env
+      - setup_remote_docker:
+        docker_layer_caching: true
+      - run:
+        name: Login to Dockerhub
+        command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run:
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - customers-service-{{ checksum "pom.xml"}}
+
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: customers-service-{{ checksum "pom.xml"}}
+
+      # package into a jar and build image
+      - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
+
+      # push docker image to docker hub
+      - run: mvn dockerfile:push
+
+      # store raw content of src code
+      - store_artifacts:
+          path: target/classes
+          destination: spring-petclinic-customers-service
+  vets-service:
+    docker:
+      - image: circleci/openjdk:8u242-jdk
+    working_directory: ~/spring-petclinic-msa/vets-service
+    steps:
+      # git pull
+      - checkout
+
+      # setup teting env
+      - setup_remote_docker:
+        docker_layer_caching: true
+      - run:
+        name: Login to Dockerhub
+        command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run:
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - cloud-gateway-{{ checksum "pom.xml"}}
+
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: cloud-gateway-{{ checksum "pom.xml"}}
+
+      # package into a jar and build image
+      - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
+
+      # push docker image to docker hub
+      - run: mvn dockerfile:push
+
+      # store raw content of src code
+      - store_artifacts:
+          path: target/classes
+          destination: spring-petclinic-vets-service
+  visits-service:
+    docker:
+      - image: circleci/openjdk:8u242-jdk
+    working_directory: ~/spring-petclinic-msa/visits-service
+    steps:
+      # git pull
+      - checkout
+
+      # setup teting env
+      - setup_remote_docker:
+        docker_layer_caching: true
+      - run:
+        name: Login to Dockerhub
+        command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run:
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - cloud-gateway-{{ checksum "pom.xml"}}
+
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: cloud-gateway-{{ checksum "pom.xml"}}
+
+      # package into a jar and build image
+      - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
+
+      # push docker image to docker hub
+      - run: mvn dockerfile:push
+
+      # store raw content of src code
+      - store_artifacts:
+          path: target/classes
+          destination: spring-petclinic-visits-service
+  web-app:
+    docker:
+      - image: circleci/openjdk:8u242-jdk
+    working_directory: ~/spring-petclinic-msa/web-app
+    steps:
+      # git pull
+      - checkout
+
+      # setup teting env
+      - setup_remote_docker:
+        docker_layer_caching: true
+      - run:
+        name: Login to Dockerhub
+        command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run:
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - cloud-gateway-{{ checksum "pom.xml"}}
+
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: cloud-gateway-{{ checksum "pom.xml"}}
+
+      # package into a jar and build image
+      - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
+
+      # push docker image to docker hub
+      - run: mvn dockerfile:push
+
+      # store raw content of src code
+      - store_artifacts:
+          path: target/classes
+          destination: spring-petclinic-web-app
