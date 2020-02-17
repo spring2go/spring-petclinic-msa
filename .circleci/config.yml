@@ -48,7 +48,7 @@ jobs:
       - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
 
       # push docker image to docker hub
-      - run: mvn dockerfile:push
+      - run: mvn dockerfile:push -Ddocker.image.tag=$CIRCLE_BUILD_NUM
 
       # store raw content of src code
       - store_artifacts:
@@ -85,7 +85,7 @@ jobs:
       - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
 
       # push docker image to docker hub
-      - run: mvn dockerfile:push
+      - run: mvn dockerfile:push -Ddocker.image.tag=$CIRCLE_BUILD_NUM
 
       # store raw content of src code
       - store_artifacts:
@@ -122,7 +122,7 @@ jobs:
       - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
 
       # push docker image to docker hub
-      - run: mvn dockerfile:push
+      - run: mvn dockerfile:push -Ddocker.image.tag=$CIRCLE_BUILD_NUM
 
       # store raw content of src code
       - store_artifacts:
@@ -159,7 +159,7 @@ jobs:
       - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
 
       # push docker image to docker hub
-      - run: mvn dockerfile:push
+      - run: mvn dockerfile:push -Ddocker.image.tag=$CIRCLE_BUILD_NUM
 
       # store raw content of src code
       - store_artifacts:
@@ -196,7 +196,7 @@ jobs:
       - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
 
       # push docker image to docker hub
-      - run: mvn dockerfile:push
+      - run: mvn dockerfile:push -Ddocker.image.tag=$CIRCLE_BUILD_NUM
 
       # store raw content of src code
       - store_artifacts:
