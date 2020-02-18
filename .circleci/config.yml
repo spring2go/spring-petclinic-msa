@@ -1,4 +1,5 @@
-version: 2
+version: 2.1
+
 jobs:
   build:
     docker:
@@ -22,153 +23,43 @@ jobs:
       - image: circleci/openjdk:8u242-jdk
     working_directory: ~/spring-petclinic-msa/cloud-gateway
     steps:
-      # git pull
-      - checkout:
-          path: ~/spring-petclinic-msa
-
-      - setup_remote_docker
-
-      - run:
-          name: Login to Dockerhub
-          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - cloud-gateway-{{ checksum "pom.xml"}}
-
-      - run: mvn dependency:go-offline
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: cloud-gateway-{{ checksum "pom.xml"}}
-
-      # package into a jar and build image
-      - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
-
-      # push docker image to docker hub
-      - run: mvn dockerfile:push -Ddocker.image.tag=$CIRCLE_BUILD_NUM
-
-      # store raw content of src code
-      - store_artifacts:
-          path: target/classes
-          destination: spring-petclinic-cloud-gateway
+      - build-service:
+          service-name: "cloud-gateway"
   customers-service:
     docker:
       - image: circleci/openjdk:8u242-jdk
     working_directory: ~/spring-petclinic-msa/customers-service
     steps:
-      # git pull
-      - checkout:
-          path: ~/spring-petclinic-msa
-
-      - setup_remote_docker
-
-      - run:
-          name: Login to Dockerhub
-          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - customers-service-{{ checksum "pom.xml"}}
-
-      - run: mvn dependency:go-offline
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: customers-service-{{ checksum "pom.xml"}}
-
-      # package into a jar and build image
-      - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
-
-      # push docker image to docker hub
-      - run: mvn dockerfile:push -Ddocker.image.tag=$CIRCLE_BUILD_NUM
-
-      # store raw content of src code
-      - store_artifacts:
-          path: target/classes
-          destination: spring-petclinic-customers-service
+      - build-service:
+          service-name: "customers-service"
   vets-service:
     docker:
       - image: circleci/openjdk:8u242-jdk
     working_directory: ~/spring-petclinic-msa/vets-service
     steps:
-      # git pull
-      - checkout:
-          path: ~/spring-petclinic-msa
-
-      - setup_remote_docker
-
-      - run:
-          name: Login to Dockerhub
-          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - cloud-gateway-{{ checksum "pom.xml"}}
-
-      - run: mvn dependency:go-offline
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: cloud-gateway-{{ checksum "pom.xml"}}
-
-      # package into a jar and build image
-      - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
-
-      # push docker image to docker hub
-      - run: mvn dockerfile:push -Ddocker.image.tag=$CIRCLE_BUILD_NUM
-
-      # store raw content of src code
-      - store_artifacts:
-          path: target/classes
-          destination: spring-petclinic-vets-service
+      - build-service:
+          service-name: "vets-service"
   visits-service:
     docker:
       - image: circleci/openjdk:8u242-jdk
     working_directory: ~/spring-petclinic-msa/visits-service
     steps:
-      # git pull
-      - checkout:
-          path: ~/spring-petclinic-msa
-
-      - setup_remote_docker
-
-      - run:
-          name: Login to Dockerhub
-          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - cloud-gateway-{{ checksum "pom.xml"}}
-
-      - run: mvn dependency:go-offline
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: cloud-gateway-{{ checksum "pom.xml"}}
-
-      # package into a jar and build image
-      - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
-
-      # push docker image to docker hub
-      - run: mvn dockerfile:push -Ddocker.image.tag=$CIRCLE_BUILD_NUM
-
-      # store raw content of src code
-      - store_artifacts:
-          path: target/classes
-          destination: spring-petclinic-visits-service
+      - build-service:
+          service-name: "visits-service"
   web-app:
     docker:
       - image: circleci/openjdk:8u242-jdk
     working_directory: ~/spring-petclinic-msa/web-app
+    steps:
+      - build-service:
+          service-name: "web-app"
+
+commands:
+  build-service:
+    description: "Build a service and push image to dockerhub"
+    parameters:
+      service-name:
+        type: string
     steps:
       # git pull
       - checkout:
@@ -183,14 +74,14 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - cloud-gateway-{{ checksum "pom.xml"}}
+            - << parameters.service-name >>-{{ checksum "pom.xml"}}
 
       - run: mvn dependency:go-offline
 
       - save_cache:
           paths:
             - ~/.m2
-          key: cloud-gateway-{{ checksum "pom.xml"}}
+          key: << parameters.service-name >>-{{ checksum "pom.xml"}}
 
       # package into a jar and build image
       - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
@@ -201,4 +92,4 @@ jobs:
       # store raw content of src code
       - store_artifacts:
           path: target/classes
-          destination: spring-petclinic-web-app
+          destination: spring-petclinic-<< parameters.service-name >>
