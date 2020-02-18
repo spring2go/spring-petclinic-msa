@@ -84,7 +84,7 @@ commands:
           key: << parameters.service-name >>-{{ checksum "pom.xml"}}
 
       # package into a jar and build image
-      - run: mvn clean package -Ddocker.image.tag=$CIRCLE_BUILD_NUM -Ddockerfile.maven.settings.auth=false
+      - run: mvn clean package -Ddocker.image.tag=Build-${CIRCLE_BUILD_NUM}-CI -Ddockerfile.maven.settings.auth=false
 
       # push docker image to docker hub
       - run: mvn dockerfile:push -Ddocker.image.tag=$CIRCLE_BUILD_NUM
