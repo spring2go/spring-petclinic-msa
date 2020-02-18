@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  selector:
+    matchLabels:
+      app: web
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: spring2go/spring-petclinic-web-app:1.0.0.RELEASE
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+            - name: VISITS_SERVICE_ENDPOINT
+              value: http://visits:8080
+            - name: CUSTOMERS_SERVICE_ENDPOINT
+              value: http://customers:8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  labels:
+    svc: web
+spec:
+  selector:
+    app: web
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customers
+spec:
+  selector:
+    matchLabels:
+      app: customers
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: customers
+    spec:
+      containers:
+        - name: customers
+          image: spring2go/spring-petclinic-customers-service:1.0.0.RELEASE
+          resources:
+            requests:
+              memory: "128Mi"
+            limits:
+              memory: "512Mi"
+          env:
+            - name: JAVA_OPTS
+              value: "-XX:MaxRAMPercentage=80.0"
+            - name: SERVER_PORT
+              value: "8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customers
+  labels:
+    svc: customers
+spec:
+  selector:
+    app: customers
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
