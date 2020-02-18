@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: gateway-service
-          image: spring2go/spring-petclinic-cloud-gateway:Build-26-CI
+          image: spring2go/spring-petclinic-cloud-gateway:1.0.0.RELEASE
           env:
             - name: SERVER_PORT
               value: "8080"
