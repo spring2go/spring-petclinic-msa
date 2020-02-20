@@ -7,3 +7,5 @@ ADD ${ARTIFACT_NAME}.jar /usr/share/app.jar
 EXPOSE ${EXPOSED_PORT}
 # ENTRYPOINT ["java", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-XshowSettings:vm", "-Djava.security.egd=file:/dev/./urandom","-jar","/usr/share/app.jar"]
 ENTRYPOINT exec java $JAVA_OPTS  -jar /usr/share/app.jar
+
+# for circleci demo
