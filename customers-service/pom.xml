@@ -17,6 +17,7 @@
 	<dependencies>
 
         <!-- Spring Boot -->
+        <!-- 暴漏监控Metrix使用 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>

@@ -27,7 +27,7 @@
         <java.version>1.8</java.version>
 
         <!-- Docker build -->
-        <docker.image.prefix>spring2go</docker.image.prefix>
+        <docker.image.prefix>nickwang94</docker.image.prefix>
         <docker.image.exposed.port>8080</docker.image.exposed.port>
         <dockerfile.plugin.version>1.4.13</dockerfile.plugin.version>
         <docker.image.tag>${project.version}</docker.image.tag>
@@ -86,7 +86,7 @@
                         </execution>
                     </executions>
                     <configuration>
-                        <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                        <repository>registry.hub.docker.com/${docker.image.prefix}/${project.artifactId}</repository>
                         <contextDirectory>${basedir}</contextDirectory>
                         <tag>${docker.image.tag}</tag>
                         <!-- 注意在本地.m2/settings.xml中设置dockerhub账号和密码 -->
